@@ -22,7 +22,7 @@ tail.on('line', function(line) {
   let d2 = d1[0].split(':')
   let time = [d2[1], d2[2], d2[3]].join(':')
   let d3 = d2[0].split('/')
-  let date = new Date([d3[2], d3[1], d3[0], time, zone].join(' '))
+  let date = new Date([d3[2], d3[1], d3[0], time, zone].join(' ')).getTime()
 
   screens[id] = screens[id] ? screens[id] : {eid:'', times:[], path:'', response:'', version:''}
   screens[id].eid = screenEid
@@ -56,7 +56,7 @@ const requests_ = new Rx.Subject()
 function serveStarts(e) {
   console.log('serving stats')
   e.res.writeHead(200, { 'Content-Type': 'text/HTML' })
-  let now = new Date()
+  let now = new Date().getTime()
   let i = 1
   e.res.end(renderer({
     screens: Object.keys(screens).map(function(id) {
@@ -93,5 +93,5 @@ const PORT = process.env.PORT
 http.createServer((req, res) => {
   requests_.onNext({ req: req, res: res })
 }).listen(PORT, hostname, () => {
-  console.log(`Server running at http://${hostname}:${port}/`)
+  console.log(`Server running at http://${hostname}:${PORT}/`)
 })
