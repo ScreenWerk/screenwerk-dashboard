@@ -1,0 +1,23 @@
+{
+  "name": "ScreenWerk-Dashboard",
+  "description": "Dashboard for Screenwerk players",
+  "version": "0.0.1",
+  "main": "./dashboard.js",
+  "license": "MIT",
+  "private": true,
+  "single-instance": false,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mitselek/Screenwerk-Dashboard"
+  },
+  "scripts": {
+    "start": "node dashboard.js"
+  },
+  "dependencies": {
+    "always-tail": "^0.2.0",
+    "async": "^1.5.2",
+    "object-path": "^0.9.2",
+    "pug": "^2.0.0-beta6",
+    "rx": "^4.1.0"
+  }
+}

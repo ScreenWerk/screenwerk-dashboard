@@ -1,0 +1,16 @@
+extends layout
+
+append styles
+  // Custom styles for this template
+  //- link(href='../node_modules/jade-bootstrap/css/dashboard.css', rel='stylesheet')
+
+block body
+  .container
+    h1.page-header All the screens
+    .row
+      each screen in screens
+        .col-xs-12.col-sm-4.col-lg-2
+          h4= screen.i + '. ' + screen.id + ' -' + screen.lastSeen + 's'
+          p= screen.ip
+          p= screen.version
+          p= 'Every ' + screen.avgInterval + 's'
