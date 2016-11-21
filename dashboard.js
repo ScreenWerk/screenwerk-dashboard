@@ -22,6 +22,10 @@ let re = /\b((?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][
 tail.on('line', function(line) {
   let match = re.exec(line)
 
+  if (match === null) {
+    console.log('cant parse ', line)
+    return
+  }
   let screenEid = match[4]
   let ip = match[1]
   let id = screenEid + '@' + ip
