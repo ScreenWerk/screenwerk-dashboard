@@ -2,6 +2,13 @@ const fs = require('fs')
 const util = require('util')
 const Tail = require('always-tail')
 
+const entu = require('entulib')
+const APP_ENTU_OPTIONS = {
+  entuUrl: process.env.ENTU_URL || 'https://piletilevi.entu.ee',
+  user: process.env.ENTU_USER || 1000,
+  key: process.env.ENTU_KEY || ''
+}
+
 
 const NGINX_LOG = __dirname + '/' + process.env.NGINX_LOG
 
@@ -29,6 +36,13 @@ tail.on('line', function(line) {
     if (screens[id] === undefined) {
       return
     }
+  }
+
+  if (screens[id] === undefined) {
+    entu.pollParents(id, APP_ENTU_OPTIONS)
+      .then(function(parents) {
+        console.log(require('util').inspect(parents, { depth: null }))
+      })
   }
 
   screens[id] = screens[id] ? screens[id] : {eid:'', times:[], path:'', response:'', version:''}
