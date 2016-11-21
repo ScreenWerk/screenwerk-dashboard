@@ -43,7 +43,7 @@ tail.on('line', function(line) {
     screens[id] = {eid:'', times:[], path:'', response:'', version:''}
     entu.getEntity(screenEid, APP_ENTU_OPTIONS)
       .then(function(opScreen) {
-        let screengroup = opScreen.get(['properties', 'screen-group'])
+        let screengroup = opScreen.get(['properties', 'screen-group', 0])
         if (screenGroups[String(screengroup.reference)] === undefined) {
           screenGroups[String(screengroup.reference)] = {
             sg: screengroup,

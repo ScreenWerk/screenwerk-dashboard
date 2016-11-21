@@ -11,7 +11,7 @@ block body
       each screenGroup in screenGroups
         .col-xs-12
           H3= screenGroup.eid + ': ' + screenGroup.name
-          pre= JSON.stringify(screenGroup, null, 4)
+          // pre= JSON.stringify(screenGroup, null, 4)
           each screen in screenGroup.screens
             .col-xs-12.col-sm-4.col-lg-2
               pre= JSON.stringify(screen, null, 4)
