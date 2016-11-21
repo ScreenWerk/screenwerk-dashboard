@@ -31,10 +31,11 @@ docker run -d \
     --env="NEW_RELIC_LOG=stdout" \
     --env="NEW_RELIC_LOG_LEVEL=error" \
     --env="NEW_RELIC_NO_CONFIG_FILE=true" \
-    --env="NGINX_LOG=log/swpublisher.entu.eu.log" \
+    --env="NGINX_LOG=access.log" \
     --env="ENTU_KEY=" \
     --env="SENTRY_DSN=" \
     --volume="/data/nginx/log/access/:/usr/src/swdashboard/log/" \
+    --volume="/data/nginx/log/access/swpublisher.entu.eu.log:/usr/src/swdashboard/access.log:ro"
     swdashboard:latest
 
 printf "\n\n"

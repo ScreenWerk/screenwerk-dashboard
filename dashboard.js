@@ -23,13 +23,20 @@ tail.on('line', function(line) {
   let time = [d2[1], d2[2], d2[3]].join(':')
   let d3 = d2[0].split('/')
   let date = new Date([d3[2], d3[1], d3[0], time, zone].join(' ')).getTime()
+  let response_code = match[5]
+
+  if (response_code !== '200') {
+    if (screens[id] === undefined) {
+      return
+    }
+  }
 
   screens[id] = screens[id] ? screens[id] : {eid:'', times:[], path:'', response:'', version:''}
   screens[id].eid = screenEid
   screens[id].ip = ip
   screens[id].times.push(date)
   screens[id].path = match[3]
-  screens[id].response = match[5]
+  screens[id].response = response_code
   screens[id].version = match[6].split(' ')[match[6].split(' ').length - 1]
   if (screens[id].times.length > 1) {
     while (screens[id].times.length > 30) {
