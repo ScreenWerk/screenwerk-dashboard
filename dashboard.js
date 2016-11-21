@@ -91,7 +91,7 @@ const Rx = require('rx')
 const requests_ = new Rx.Subject()
 
 function serveStarts(e) {
-  console.log('serving stats')
+  // console.log('serving stats')
   e.res.writeHead(200, { 'Content-Type': 'text/HTML' })
   let now = new Date().getTime()
   let i = 1
@@ -99,7 +99,7 @@ function serveStarts(e) {
 }
 
 const subscription = requests_
-  .tap(e => console.log('request to', e.req.url))
+  // .tap(e => console.log('request to', e.req.url))
   .subscribe(
     serveStarts,
     console.error,
