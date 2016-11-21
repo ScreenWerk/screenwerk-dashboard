@@ -94,5 +94,5 @@ const PORT = process.env.PORT
 http.createServer((req, res) => {
   requests_.onNext({ req: req, res: res })
 }).listen(PORT, () => {
-  console.log(`Server running at http://${HOST}:${PORT}/`)
+  console.log(`Server running at port:${PORT}`)
 })
