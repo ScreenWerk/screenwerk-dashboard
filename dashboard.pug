@@ -15,7 +15,7 @@ block body
             .col-xs-6.col-sm-4.col-lg-2
               - delay = Math.round((new Date().getTime() - screen.lastSeen)/1e3)
               h4(onClick="openInNewTab('https://piletilevi.entu.ee/entity/screen/' + " + screen.eid + ");" class=(delay > screen.avgInterval ? (delay > 2*screen.avgInterval ? 'bg-danger': 'bg-warning') : 'bg-success'))= screen.eid + ' -' + delay + 'sec'
-              p= JSON.stringify(screen.name, null, 4)
+              p= screen.name
               p= screen.version
               p= screen.ip
               if screen.avgInterval
