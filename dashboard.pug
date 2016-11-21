@@ -10,7 +10,7 @@ block body
     .row
       each screenGroup in screenGroups
         .col-xs-12
-          H3= screenGroup.eid + ': ' + screenGroup.name
+          H3(onClick="var win = window.open('https://piletilevi.entu.ee/entity/screen-group/' + screenGroup.eid, '_blank');win.focus();")= screenGroup.eid + ': ' + screenGroup.name
           each screen in screenGroup.screens
             .col-xs-6.col-sm-4.col-lg-2
               - delay = Math.round((new Date().getTime() - screen.lastSeen)/1e3)
