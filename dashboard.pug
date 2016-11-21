@@ -8,9 +8,9 @@ block body
   .container
     h1.page-header All the screens
     .row
-      each screen in screens
-        .col-xs-12.col-sm-4.col-lg-2
-          h4= screen.i + '. ' + screen.id + ' -' + screen.lastSeen + 's'
-          p= screen.ip
-          p= screen.version
-          p= 'Every ' + screen.avgInterval + 's'
+      each screenGroup in screenGroups
+        .col-xs-12
+          H3 = screenGroup.eid + ': ' + screenGroup.name
+          each screen in screenGroup.screens
+            .col-xs-12.col-sm-4.col-lg-2
+              pre= JSON.stringify(screen, null, 4)

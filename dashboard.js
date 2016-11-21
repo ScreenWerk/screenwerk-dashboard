@@ -13,6 +13,7 @@ const APP_ENTU_OPTIONS = {
 const NGINX_LOG = __dirname + '/' + process.env.NGINX_LOG
 
 var screens = {}
+var screenGroups = {}
 if (!fs.existsSync(NGINX_LOG)) fs.writeFileSync(NGINX_LOG, "")
 console.log('Tailing logfile from: ' + NGINX_LOG)
 var tail = new Tail(NGINX_LOG, '\n', { interval: 100 })
@@ -39,19 +40,29 @@ tail.on('line', function(line) {
   }
 
   if (screens[id] === undefined) {
+    screens[id] = {eid:'', times:[], path:'', response:'', version:''}
     entu.getEntity(screenEid, APP_ENTU_OPTIONS)
-      .then(function(parents) {
-        console.log(require('util').inspect(parents.get(['properties', 'screen-group']), { depth: null }))
+      .then(function(opScreen) {
+        let screengroup = opScreen.get(['properties', 'screen-group'])
+        if (screenGroups[String(screengroup.reference)] === undefined) {
+          screenGroups[String(screengroup.reference)] = {
+            eid: String(screengroup.reference),
+            name: screengroup.value,
+            screens: []
+          }
+        }
+        screenGroups[String(screengroup.reference)].screens.push(screens[id])
+        // console.log(require('util').inspect(parents.get(['properties', 'screen-group']), { depth: null }))
       })
   }
 
-  screens[id] = screens[id] ? screens[id] : {eid:'', times:[], path:'', response:'', version:''}
   screens[id].eid = screenEid
   screens[id].ip = ip
   screens[id].times.push(date)
   screens[id].path = match[3]
   screens[id].response = response_code
   screens[id].version = match[6].split(' ')[match[6].split(' ').length - 1]
+  screens[id].lastSeen = screens[id].times[screens[id].times.length - 1]
   if (screens[id].times.length > 1) {
     while (screens[id].times.length > 30) {
       screens[id].times.shift()
@@ -79,19 +90,20 @@ function serveStarts(e) {
   e.res.writeHead(200, { 'Content-Type': 'text/HTML' })
   let now = new Date().getTime()
   let i = 1
-  e.res.end(renderer({
-    screens: Object.keys(screens).map(function(id) {
-      return {
-        i: i++,
-        id: screens[id].eid,
-        ip: screens[id].ip,
-        version: screens[id].version,
-        avgInterval: screens[id].avgInterval,
-        lastSeen: (Math.round((now - screens[id].times[screens[id].times.length - 1]) / 100) / 10),
-      }
-    })
-    // .sort(function(a,b) { return a.id < b.id })
-  }))
+  e.res.end(renderer({screenGroups: screenGroups}))
+  // e.res.end(renderer({
+  //   screens: Object.keys(screens).map(function(id) {
+  //     return {
+  //       i: i++,
+  //       id: screens[id].eid,
+  //       ip: screens[id].ip,
+  //       version: screens[id].version,
+  //       avgInterval: screens[id].avgInterval,
+  //       lastSeen: (Math.round((now - screens[id].times[screens[id].times.length - 1]) / 100) / 10),
+  //     }
+  //   })
+  //   // .sort(function(a,b) { return a.id < b.id })
+  // }))
 }
 
 const subscription = requests_
