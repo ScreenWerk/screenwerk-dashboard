@@ -12,7 +12,12 @@ html(lang="en")
       link(rel="stylesheet",href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css")
   body(data-spy="scroll",data-target=".scrollspy")
     block body
-      
+
     block scripts
+      script.
+        function openInNewTab(url) {
+          var win = window.open(url, '_blank');
+          win.focus();
+        }
       script(src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js")
       script(src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js")
