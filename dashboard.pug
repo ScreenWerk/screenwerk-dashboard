@@ -11,11 +11,10 @@ block body
       each screenGroup in screenGroups
         .col-xs-12
           H3= screenGroup.eid + ': ' + screenGroup.name
-          // pre= JSON.stringify(screenGroup, null, 4)
           each screen in screenGroup.screens
             .col-xs-6.col-sm-4.col-lg-2
               h4= screen.eid + ' ' + Math.round((screen.lastSeen - new Date().getTime())/1e3) + 'sec'
               p= screen.version
               p= screen.ip
-              p= 'Every ' + screen.avgInterval + 'sec'
-              // pre= JSON.stringify(screen, null, 4)
+              if screen.avgInterval
+                p= 'Every ' + screen.avgInterval + 'sec'
