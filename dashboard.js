@@ -89,10 +89,10 @@ process.on('exit', () => subscription.dispose())
 
 
 const http = require('http')
-const HOST = process.env.HOST
+// const HOST = process.env.HOST
 const PORT = process.env.PORT
 http.createServer((req, res) => {
   requests_.onNext({ req: req, res: res })
-}).listen(PORT, HOST, () => {
+}).listen(PORT, () => {
   console.log(`Server running at http://${HOST}:${PORT}/`)
 })

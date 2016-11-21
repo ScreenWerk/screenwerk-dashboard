@@ -34,7 +34,7 @@ docker run -d \
     --env="NGINX_LOG=log/swpublisher.entu.eu.log" \
     --env="ENTU_KEY=" \
     --env="SENTRY_DSN=" \
-    --volume="/data/swdashboard/log:/data/nginx/log/access/" \
+    --volume="/data/nginx/log/access/:/usr/src/swdashboard/log/" \
     swdashboard:latest
 
 printf "\n\n"
