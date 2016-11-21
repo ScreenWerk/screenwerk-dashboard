@@ -41,7 +41,7 @@ tail.on('line', function(line) {
   if (screens[id] === undefined) {
     entu.getEntity(screenEid, APP_ENTU_OPTIONS)
       .then(function(parents) {
-        console.log(require('util').inspect(parents.get(['properties']), { depth: null }))
+        console.log(require('util').inspect(parents.get(['properties', 'screen-group']), { depth: null }))
       })
   }
 
