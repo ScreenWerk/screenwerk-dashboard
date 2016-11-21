@@ -54,7 +54,6 @@ tail.on('line', function(line) {
           }
         }
         screenGroups[String(screengroup.reference)].screens.push(screens[id])
-        // console.log(require('util').inspect(parents.get(['properties', 'screen-group']), { depth: null }))
       })
   }
 
@@ -93,19 +92,6 @@ function serveStarts(e) {
   let now = new Date().getTime()
   let i = 1
   e.res.end(renderer({screenGroups: screenGroups}))
-  // e.res.end(renderer({
-  //   screens: Object.keys(screens).map(function(id) {
-  //     return {
-  //       i: i++,
-  //       id: screens[id].eid,
-  //       ip: screens[id].ip,
-  //       version: screens[id].version,
-  //       avgInterval: screens[id].avgInterval,
-  //       lastSeen: (Math.round((now - screens[id].times[screens[id].times.length - 1]) / 100) / 10),
-  //     }
-  //   })
-  //   // .sort(function(a,b) { return a.id < b.id })
-  // }))
 }
 
 const subscription = requests_
@@ -123,7 +109,6 @@ process.on('exit', () => subscription.dispose())
 
 
 const http = require('http')
-// const HOST = process.env.HOST
 const PORT = process.env.PORT
 http.createServer((req, res) => {
   requests_.onNext({ req: req, res: res })
