@@ -7,7 +7,7 @@ const NGINX_LOG = process.env.NGINX_LOG
 
 var screens = {}
 if (!fs.existsSync(NGINX_LOG)) fs.writeFileSync(NGINX_LOG, "")
-
+console.log('Tailing logfile from: ' + NGINX_LOG)
 var tail = new Tail(NGINX_LOG, '\n', { interval: 100 })
 
 let re = /\b((?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?))\b.*\[(.*)\].*"GET (.*?)\/([0-9]*)(?:\.json)? HTTP.*?" ([0-9]+?) .*" "(.*)"/
@@ -89,10 +89,10 @@ process.on('exit', () => subscription.dispose())
 
 
 const http = require('http')
-const hostname = process.env.HOST
+const HOST = process.env.HOST
 const PORT = process.env.PORT
 http.createServer((req, res) => {
   requests_.onNext({ req: req, res: res })
-}).listen(PORT, hostname, () => {
-  console.log(`Server running at http://${hostname}:${PORT}/`)
+}).listen(PORT, HOST, () => {
+  console.log(`Server running at http://${HOST}:${PORT}/`)
 })
