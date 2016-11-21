@@ -12,6 +12,7 @@ var tail = new Tail(NGINX_LOG, '\n', { interval: 100 })
 
 let re = /\b((?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?))\b.*\[(.*)\].*"GET (.*?)\/([0-9]*)(?:\.json)? HTTP.*?" ([0-9]+?) .*" "(.*)"/
 tail.on('line', function(line) {
+  console.log(line);
   let match = re.exec(line)
 
   let screenEid = match[4]
