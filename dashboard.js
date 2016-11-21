@@ -47,7 +47,7 @@ tail.watch()
 
 
 const pug = require('pug')
-const renderer = pug.compileFile('dashboard.pug')
+const renderer = pug.compileFile(__dirname + '/dashboard.pug')
 
 
 const Rx = require('rx')
