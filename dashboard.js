@@ -3,7 +3,7 @@ const util = require('util')
 const Tail = require('always-tail')
 
 
-const NGINX_LOG = process.env.NGINX_LOG
+const NGINX_LOG = __dirname + '/' + process.env.NGINX_LOG
 
 var screens = {}
 if (!fs.existsSync(NGINX_LOG)) fs.writeFileSync(NGINX_LOG, "")
