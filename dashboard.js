@@ -39,7 +39,7 @@ tail.on('line', function(line) {
   }
 
   if (screens[id] === undefined) {
-    entu.pollParents(id, APP_ENTU_OPTIONS)
+    entu.pollParents(screenEid, APP_ENTU_OPTIONS)
       .then(function(parents) {
         console.log(require('util').inspect(parents, { depth: null }))
       })
