@@ -88,7 +88,7 @@ process.on('exit', () => subscription.dispose())
 
 
 const http = require('http')
-const hostname = '127.0.0.1'
+const hostname = process.env.HOST
 const PORT = process.env.PORT
 http.createServer((req, res) => {
   requests_.onNext({ req: req, res: res })

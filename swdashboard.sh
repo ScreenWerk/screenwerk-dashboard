@@ -23,6 +23,7 @@ docker run -d \
     --env="NODE_ENV=production" \
     --env="VERSION=$version" \
     --env="PORT=80" \
+    --env="HOST=swdashboard.entu.eu" \
     --env="COOKIE_SECRET=" \
     --env="DEPLOYMENT=debug" \
     --env="NEW_RELIC_APP_NAME=swdashboard" \
