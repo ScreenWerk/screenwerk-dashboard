@@ -46,6 +46,7 @@ tail.on('line', function(line) {
         let screengroup = opScreen.get(['properties', 'screen-group'])
         if (screenGroups[String(screengroup.reference)] === undefined) {
           screenGroups[String(screengroup.reference)] = {
+            sg: screengroup,
             eid: String(screengroup.reference),
             name: screengroup.value,
             screens: []

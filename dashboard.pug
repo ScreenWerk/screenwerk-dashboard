@@ -9,7 +9,7 @@ block body
     h1.page-header All the screens
     .row
       each screenGroup in screenGroups
-        .col-xs-1
+        .col-xs-12
           H3= screenGroup.eid + ': ' + screenGroup.name
           pre= JSON.stringify(screenGroup, null, 4)
           each screen in screenGroup.screens
