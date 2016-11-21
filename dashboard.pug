@@ -14,7 +14,7 @@ block body
           each screen in screenGroup.screens
             .col-xs-6.col-sm-4.col-lg-2
               - delay = Math.round((new Date().getTime() - screen.lastSeen)/1e3)
-              h4(class=(delay > screen.avgInterval ? (delay > 2*screen.avgInterval ? 'bg-danger': 'bg-warning') : 'bg-primary'))
+              h4(class=(delay > screen.avgInterval ? (delay > 2*screen.avgInterval ? 'bg-danger': 'bg-warning') : 'bg-success'))
                 a(href="teamviewer:Sikupilli Statoil2")= screen.eid + ' -' + delay + 'sec'
               p= screen.version
               p= screen.ip
