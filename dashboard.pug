@@ -10,7 +10,7 @@ block body
     .row
       each screenGroup in screenGroups
         .col-xs-12
-          pre= JSON.stringify(screenGroup)
+          pre= JSON.stringify(screenGroup, null, 4)
           // H3(onClick="openInNewTab('https://piletilevi.entu.ee/entity/screen-group/' + " + screenGroup.eid + ");")= screenGroup.eid + ': ' + screenGroup.name
           each screen in screenGroup.screens
             .col-xs-6.col-sm-4.col-lg-2
