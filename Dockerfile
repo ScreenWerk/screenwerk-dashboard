@@ -1,4 +1,4 @@
-FROM node:6-slim
+FROM node:7-slim
 
 ADD ./ /usr/src/swdashboard
 RUN cd /usr/src/swdashboard && npm --silent --production install
