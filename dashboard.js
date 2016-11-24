@@ -59,7 +59,7 @@ tail.on('line', function(line) {
                 // opScreenGroup: opScreenGroup,
                 eid: screenGroupEid,
                 name: screengroup.value,
-                published: new Date(opScreenGroup.get('properties', 'published', 0, 'value')).toString()
+                published: new Date(opScreenGroup.get('properties', 'published', 0, 'value')).toString(),
                 screens: []
               }
               screenGroups[screenGroupEid].screens.push(screens[id])
