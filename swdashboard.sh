@@ -31,6 +31,7 @@ docker run -d \
     --env="NEW_RELIC_LOG=stdout" \
     --env="NEW_RELIC_LOG_LEVEL=error" \
     --env="NEW_RELIC_NO_CONFIG_FILE=true" \
+    --env="GOOGLE_TIMEZONE_API_KEY=" \
     --env="NGINX_LOG=access.log" \
     --env="ENTU_KEY=" \
     --env="SENTRY_DSN=" \
