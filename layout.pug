@@ -9,8 +9,13 @@ html(lang="en")
     link(rel="icon",href="../../favicon.ico")
     title= title
     block styles
-      link(rel="stylesheet", type="text/plain", href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css")
-      link(rel="stylesheet", type="text/plain", href="dashboard.css")
+      link(rel="stylesheet", type="text/css", href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css")
+    style.
+      .screen {
+        height: 200px;
+        background-color: aqua;
+      }
+
   body(data-spy="scroll",data-target=".scrollspy")
     block body
 
