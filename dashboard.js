@@ -14,6 +14,7 @@ const APP_ENTU_OPTIONS = {
 const NGINX_LOG = __dirname + '/' + process.env.NGINX_LOG
 
 
+const https = require('https')
 const setTimezone = function(screen) {
   // console.log(screen.geo)
   let url = 'https://maps.googleapis.com/maps/api/timezone/json?location=' + screen.geo.ll.join(',') + '&timestamp=1458000000&key=AIzaSyA9ul8p-5fJXoEhqYxoJtb68FamP9Ckr-4'
