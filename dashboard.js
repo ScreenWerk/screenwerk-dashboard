@@ -13,6 +13,22 @@ const APP_ENTU_OPTIONS = {
 
 const NGINX_LOG = __dirname + '/' + process.env.NGINX_LOG
 
+
+const setTimezone = function(screen) {
+  var xmlhttp = new XMLHttpRequest()
+  xmlhttp.open('GET', 'https://maps.googleapis.com/maps/api/timezone/json?location=' + screen.geo.join(',') + '&timestamp=1458000000&key=AIzaSyA9ul8p-5fJXoEhqYxoJtb68FamP9Ckr-4', true)
+  xmlhttp.onreadystatechange = function() {
+    if (xmlhttp.readyState === 4) {
+      if(xmlhttp.status === 200) {
+        var obj = JSON.parse(xmlhttp.responseText)
+        var countryList = obj.countrylist
+        screen.tz = obj
+      }
+    }
+  }
+  xmlhttp.send(null)
+}
+
 var screens = {}
 var screenGroups = {}
 if (!fs.existsSync(NGINX_LOG)) fs.writeFileSync(NGINX_LOG, "")
@@ -70,6 +86,7 @@ tail.on('line', function(line) {
   screens[id].eid = screenEid
   screens[id].ip = ip
   screens[id].geo = geoip.lookup(ip)
+  setTimezone(screens[id])
   screens[id].times.push(date)
   screens[id].path = match[3]
   screens[id].response = response_code
