@@ -14,6 +14,7 @@ const APP_ENTU_OPTIONS = {
 const NGINX_LOG = __dirname + '/' + process.env.NGINX_LOG
 
 const GOOGLE_TIMEZONE_API_KEY = process.env.GOOGLE_TIMEZONE_API_KEY || ''
+const GOOGLE_MAPS_API_KEY = process.env.GOOGLE_MAPS_API_KEY || ''
 const https = require('https')
 const setTimezone = function(screen) {
   let url = 'https://maps.googleapis.com/maps/api/timezone/json?location=' + screen.geo.ll.join(',') + '&timestamp=1458000000&key=' + GOOGLE_TIMEZONE_API_KEY
@@ -24,7 +25,7 @@ const setTimezone = function(screen) {
   }).on('error', function(e) { console.log("Got an error: ", e) })
 }
 const setAddress = function(screen) {
-  let url = 'https://maps.googleapis.com/maps/api/geocode/json?latlng=' + screen.geo.ll.join(',') + '&key=' + GOOGLE_TIMEZONE_API_KEY
+  let url = 'https://maps.googleapis.com/maps/api/geocode/json?latlng=' + screen.geo.ll.join(',') + '&key=' + GOOGLE_MAPS_API_KEY
   console.log(url)
   https.get(url, function(res) {
     let body = ''
