@@ -21,7 +21,7 @@ const setTimezone = function(screen) {
   https.get(url, function(res) {
     let body = ''
     res.on('data', function(chunk) { body += chunk })
-    res.on('end', function() { screen.tz = JSON.parse(body) })
+    res.on('end', function() { screen.tz = JSON.parse(body).timeZoneId })
   }).on('error', function(e) { console.log("Got an error: ", e) })
 }
 
