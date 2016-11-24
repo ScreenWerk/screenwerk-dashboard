@@ -13,10 +13,10 @@ const APP_ENTU_OPTIONS = {
 
 const NGINX_LOG = __dirname + '/' + process.env.NGINX_LOG
 
-
+const GOOGLE_TIMEZONE_API_KEY = process.env.GOOGLE_TIMEZONE_API_KEY || ''
 const https = require('https')
 const setTimezone = function(screen) {
-  let url = 'https://maps.googleapis.com/maps/api/timezone/json?location=' + screen.geo.ll.join(',') + '&timestamp=1458000000&key=AIzaSyA9ul8p-5fJXoEhqYxoJtb68FamP9Ckr-4'
+  let url = 'https://maps.googleapis.com/maps/api/timezone/json?location=' + screen.geo.ll.join(',') + '&timestamp=1458000000&key=' + GOOGLE_TIMEZONE_API_KEY
   https.get(url, function(res) {
     let body = ''
     res.on('data', function(chunk) { body += chunk })
@@ -24,7 +24,7 @@ const setTimezone = function(screen) {
   }).on('error', function(e) { console.log("Got an error: ", e) })
 }
 const setAddress = function(screen) {
-  let url = 'https://maps.googleapis.com/maps/api/geocode/json?latlng=' + screen.geo.ll.join(',') + '&sensor=true'
+  let url = 'https://maps.googleapis.com/maps/api/geocode/json?latlng=' + screen.geo.ll.join(',') + '&key=' + GOOGLE_TIMEZONE_API_KEY
   console.log(url)
   https.get(url, function(res) {
     let body = ''
@@ -70,6 +70,12 @@ tail.on('line', function(line) {
 
   if (screens[id] === undefined) {
     screens[id] = {eid:'', name:'', times:[], path:'', response:'', version:''}
+    screens[id].eid = screenEid
+    screens[id].ip = ip
+    screens[id].geo = geoip.lookup(ip)
+    setTimezone(screens[id])
+    setAddress(screens[id])
+
     entu.getEntity(screenEid, APP_ENTU_OPTIONS)
       .then(function(opScreen) {
         let screengroup = opScreen.get(['properties', 'screen-group', 0])
@@ -89,11 +95,6 @@ tail.on('line', function(line) {
       })
   }
 
-  screens[id].eid = screenEid
-  screens[id].ip = ip
-  screens[id].geo = geoip.lookup(ip)
-  setTimezone(screens[id])
-  setAddress(screens[id])
   screens[id].times.push(date)
   screens[id].path = match[3]
   screens[id].response = response_code
