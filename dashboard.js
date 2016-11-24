@@ -27,6 +27,8 @@ tail.on('line', function(line) {
     console.log('cant parse ', line)
     return
   }
+  console.log(match)
+
   let screenEid = match[4]
   let ip = match[1]
   let id = screenEid + '@' + ip
