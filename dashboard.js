@@ -27,7 +27,7 @@ tail.on('line', function(line) {
     console.log('cant parse ', line)
     return
   }
-  console.log(match)
+  // console.log(match)
 
   let screenEid = match[4]
   let ip = match[1]
@@ -54,21 +54,16 @@ tail.on('line', function(line) {
         screens[id].name = opScreen.get(['properties', 'name', 0, 'value'])
         screenGroupEid = String(screengroup.reference)
         if (screenGroups[screenGroupEid] === undefined) {
+          screenGroups[screenGroupEid] = { screens: [] }
           entu.getEntity(screengroup.reference, APP_ENTU_OPTIONS)
             .then(function(opScreenGroup) {
               // screenGroups[screenGroupEid] = opScreenGroup.get()
-              // screenGroups[screenGroupEid].screens = []
-              screenGroups[screenGroupEid] = {
-                // opScreenGroup: opScreenGroup,
-                eid: screenGroupEid,
-                name: screengroup.value,
-                published: opScreenGroup.get(['properties', 'published', 0, 'value']),
-                screens: []
-              }
-              screenGroups[screenGroupEid].screens.push(screens[id])
+              screenGroups[screenGroupEid].eid = screenGroupEid
+              screenGroups[screenGroupEid].name = screengroup.value
+              screenGroups[screenGroupEid].published = opScreenGroup.get(['properties', 'published', 0, 'value'])
             })
         }
-        else { screenGroups[screenGroupEid].screens.push(screens[id]) }
+        screenGroups[screenGroupEid].screens.push(screens[id])
       })
   }
 
