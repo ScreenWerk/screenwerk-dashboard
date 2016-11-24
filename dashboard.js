@@ -16,14 +16,23 @@ const NGINX_LOG = __dirname + '/' + process.env.NGINX_LOG
 
 const https = require('https')
 const setTimezone = function(screen) {
-  // console.log(screen.geo)
   let url = 'https://maps.googleapis.com/maps/api/timezone/json?location=' + screen.geo.ll.join(',') + '&timestamp=1458000000&key=AIzaSyA9ul8p-5fJXoEhqYxoJtb68FamP9Ckr-4'
   https.get(url, function(res) {
     let body = ''
     res.on('data', function(chunk) { body += chunk })
-    res.on('end', function() { screen.tz = JSON.parse(body).timeZoneId })
+    res.on('end', function() { screen.timeZoneId = JSON.parse(body).timeZoneId })
   }).on('error', function(e) { console.log("Got an error: ", e) })
 }
+const setAddress = function(screen) {
+  let url = 'http://maps.googleapis.com/maps/api/geocode/json?latlng=' + screen.geo.ll.join(',') + '&sensor=true'
+  https.get(url, function(res) {
+    let body = ''
+    res.on('data', function(chunk) { body += chunk })
+    res.on('end', function() { screen.address = JSON.parse(body)[0].formatted_address })
+  }).on('error', function(e) { console.log("Got an error: ", e) })
+}
+
+
 
 var screens = {}
 var screenGroups = {}

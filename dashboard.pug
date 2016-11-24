@@ -32,5 +32,6 @@ block body
               p= screen.version
               if screen.avgInterval
                 p= 'Every ' + screen.avgInterval + 'sec'
-              pre= JSON.stringify(screen.tz, null, 4) + ' ' + JSON.stringify(screen.geo.ll)
+              p= 'Timezone: ' + screen.address
+              p= 'Timezone: ' + screen.timeZoneId
               
