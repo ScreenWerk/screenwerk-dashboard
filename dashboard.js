@@ -15,18 +15,12 @@ const NGINX_LOG = __dirname + '/' + process.env.NGINX_LOG
 
 
 const setTimezone = function(screen) {
-  var xmlhttp = new XMLHttpRequest()
-  xmlhttp.open('GET', 'https://maps.googleapis.com/maps/api/timezone/json?location=' + screen.geo.join(',') + '&timestamp=1458000000&key=AIzaSyA9ul8p-5fJXoEhqYxoJtb68FamP9Ckr-4', true)
-  xmlhttp.onreadystatechange = function() {
-    if (xmlhttp.readyState === 4) {
-      if(xmlhttp.status === 200) {
-        var obj = JSON.parse(xmlhttp.responseText)
-        var countryList = obj.countrylist
-        screen.tz = obj
-      }
-    }
-  }
-  xmlhttp.send(null)
+  let url = 'https://maps.googleapis.com/maps/api/timezone/json?location=' + screen.geo.join(',') + '&timestamp=1458000000&key=AIzaSyA9ul8p-5fJXoEhqYxoJtb68FamP9Ckr-4'
+  http.get(url, function(res) {
+    let body = ''
+    res.on('data', function(chunk) { body += chunk })
+    res.on('end', function() { screen.tz = JSON.parse(body) })
+  }).on('error', function(e) { console.log("Got an error: ", e) })
 }
 
 var screens = {}
