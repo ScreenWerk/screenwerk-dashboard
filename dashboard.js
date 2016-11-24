@@ -24,7 +24,7 @@ const setTimezone = function(screen) {
   }).on('error', function(e) { console.log("Got an error: ", e) })
 }
 const setAddress = function(screen) {
-  let url = 'http://maps.googleapis.com/maps/api/geocode/json?latlng=' + screen.geo.ll.join(',') + '&sensor=true'
+  let url = 'https://maps.googleapis.com/maps/api/geocode/json?latlng=' + screen.geo.ll.join(',') + '&sensor=true'
   console.log(url)
   https.get(url, function(res) {
     let body = ''
