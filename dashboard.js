@@ -28,7 +28,7 @@ const setAddress = function(screen) {
   https.get(url, function(res) {
     let body = ''
     res.on('data', function(chunk) { body += chunk })
-    res.on('end', function() { screen.address = JSON.parse(body)[0].formatted_address })
+    res.on('end', function() { screen.address = JSON.parse(body) })
   }).on('error', function(e) { console.log("Got an error: ", e) })
 }
 
