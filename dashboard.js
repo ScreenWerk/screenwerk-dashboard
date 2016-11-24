@@ -50,12 +50,17 @@ tail.on('line', function(line) {
         let screengroup = opScreen.get(['properties', 'screen-group', 0])
         screens[id].name = opScreen.get(['properties', 'name', 0, 'value'])
         if (screenGroups[String(screengroup.reference)] === undefined) {
-          screenGroups[String(screengroup.reference)] = {
-            sg: screengroup,
-            eid: String(screengroup.reference),
-            name: screengroup.value,
-            screens: []
-          }
+          entu.getEntity(screengroup.reference, APP_ENTU_OPTIONS)
+            .then(function(opScreenGroup) {
+              screenGroups[String(screengroup.reference)] = opScreenGroup.get()
+              screenGroups[String(screengroup.reference)].screens = []
+              //  {
+              //   sg: screengroup,
+              //   eid: String(screengroup.reference),
+              //   name: screengroup.value,
+              //   screens: []
+              // }
+            })
         }
         screenGroups[String(screengroup.reference)].screens.push(screens[id])
       })
