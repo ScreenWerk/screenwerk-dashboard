@@ -93,6 +93,7 @@ tail.on('line', function(line) {
   screens[id].ip = ip
   screens[id].geo = geoip.lookup(ip)
   setTimezone(screens[id])
+  setAddress(screens[id])
   screens[id].times.push(date)
   screens[id].path = match[3]
   screens[id].response = response_code
