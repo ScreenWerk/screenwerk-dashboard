@@ -10,17 +10,14 @@ block body
     .row
       each screenGroup in screenGroups
         .col-xs-12
-          // pre= JSON.stringify(screenGroup, null, 4)
           H3(onClick="openInNewTab('https://piletilevi.entu.ee/entity/screen-group/' + " + screenGroup.eid + ");")= screenGroup.eid + ': ' + screenGroup.name
           pre= new Date(screenGroup.published).toString()
-          pre= new Date().getTimezoneOffset()
-          pre= screenGroup.published
           each screen in screenGroup.screens
             .col-xs-6.col-sm-4.col-lg-2
               - delay = Math.round((new Date().getTime() - screen.lastSeen)/1e3)
               h4(onClick="openInNewTab('https://piletilevi.entu.ee/entity/screen/' + " + screen.eid + ");" class=(delay > screen.avgInterval ? (delay > 5*screen.avgInterval ? 'bg-danger': 'bg-warning') : 'bg-success'))= screen.eid + ' -' + delay + 'sec'
               p(style="white-space: nowrap; background-color: white;")= screen.name
               p= screen.version
-              p= screen.ip
+              p= screen.geo.city + ' ' + JSON.stringify(screen.geo.ll)
               if screen.avgInterval
                 p= 'Every ' + screen.avgInterval + 'sec'

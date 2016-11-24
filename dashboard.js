@@ -1,6 +1,7 @@
 const fs = require('fs')
 const util = require('util')
 const Tail = require('always-tail')
+const geoip = require('geoip-lite')
 
 const entu = require('entulib')
 const APP_ENTU_OPTIONS = {
@@ -71,6 +72,7 @@ tail.on('line', function(line) {
 
   screens[id].eid = screenEid
   screens[id].ip = ip
+  screens[id].geo = geoip.lookup(ip)
   screens[id].times.push(date)
   screens[id].path = match[3]
   screens[id].response = response_code
