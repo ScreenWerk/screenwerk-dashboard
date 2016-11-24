@@ -13,22 +13,22 @@ block body
           H3(onClick="openInNewTab('https://piletilevi.entu.ee/entity/screen-group/' + " + screenGroup.eid + ");")= screenGroup.eid + ': ' + screenGroup.name
           pre= new Date(screenGroup.published).toString()
           each screen in screenGroup.screens
-            if screen.geo.city
-              .col-xs-12.col-sm-8.col-lg-4.screen
-                .col-xs-6
-                  iframe(src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d16230.180407127882!2d" + screen.geo.ll[1] + "!3d" + screen.geo.ll[0] + "!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2s!5e0!3m2!1sen!2see!4v1479988696648" width="100%" frameborder="0" style="border:0" allowfullscreen)
-                .col-xs-6
-                  - delay = Math.round((new Date().getTime() - screen.lastSeen)/1e3)
-                  h4(onClick="openInNewTab('https://piletilevi.entu.ee/entity/screen/' + " + screen.eid + ");" class=(delay > screen.avgInterval ? (delay > 5*screen.avgInterval ? 'bg-danger': 'bg-warning') : 'bg-success'))= screen.eid + ' -' + delay + 'sec'
-                  p(style="white-space: nowrap; background-color: white;")= screen.name
-                  p= screen.version
-                  if screen.avgInterval
-                    p= 'Every ' + screen.avgInterval + 'sec'
-            else
-              .col-xs-6.col-sm-4.col-lg-2.screen
-                - delay = Math.round((new Date().getTime() - screen.lastSeen)/1e3)
-                h4(onClick="openInNewTab('https://piletilevi.entu.ee/entity/screen/' + " + screen.eid + ");" class=(delay > screen.avgInterval ? (delay > 5*screen.avgInterval ? 'bg-danger': 'bg-warning') : 'bg-success'))= screen.eid + ' -' + delay + 'sec'
-                p(style="white-space: nowrap; background-color: white;")= screen.name
-                p= screen.version
-                if screen.avgInterval
-                  p= 'Every ' + screen.avgInterval + 'sec'
+            //- if screen.geo.city
+            //-   .col-xs-12.col-sm-8.col-lg-4.screen
+            //-     .col-xs-6
+            //-       iframe(src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d16230.180407127882!2d" + screen.geo.ll[1] + "!3d" + screen.geo.ll[0] + "!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2s!5e0!3m2!1sen!2see!4v1479988696648" width="100%" frameborder="0" style="border:0" allowfullscreen)
+            //-     .col-xs-6
+            //-       - delay = Math.round((new Date().getTime() - screen.lastSeen)/1e3)
+            //-       h4(onClick="openInNewTab('https://piletilevi.entu.ee/entity/screen/' + " + screen.eid + ");" class=(delay > screen.avgInterval ? (delay > 5*screen.avgInterval ? 'bg-danger': 'bg-warning') : 'bg-success'))= screen.eid + ' -' + delay + 'sec'
+            //-       p(style="white-space: nowrap; background-color: white;")= screen.name
+            //-       p= screen.version
+            //-       if screen.avgInterval
+            //-         p= 'Every ' + screen.avgInterval + 'sec'
+            //- else
+            .col-xs-6.col-sm-4.col-lg-2.screen
+              - delay = Math.round((new Date().getTime() - screen.lastSeen)/1e3)
+              h4(onClick="openInNewTab('https://piletilevi.entu.ee/entity/screen/' + " + screen.eid + ");" class=(delay > screen.avgInterval ? (delay > 5*screen.avgInterval ? 'bg-danger': 'bg-warning') : 'bg-success'))= screen.eid + ' -' + delay + 'sec'
+              p(style="white-space: nowrap; background-color: white;")= screen.name
+              p= screen.version
+              if screen.avgInterval
+                p= 'Every ' + screen.avgInterval + 'sec'
