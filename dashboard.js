@@ -53,15 +53,16 @@ tail.on('line', function(line) {
         if (screenGroups[screenGroupEid] === undefined) {
           entu.getEntity(screengroup.reference, APP_ENTU_OPTIONS)
             .then(function(opScreenGroup) {
-              screenGroups[screenGroupEid] = opScreenGroup.get()
-              screenGroups[screenGroupEid].screens = []
+              // screenGroups[screenGroupEid] = opScreenGroup.get()
+              // screenGroups[screenGroupEid].screens = []
+              screenGroups[screenGroupEid] = {
+                // opScreenGroup: opScreenGroup,
+                eid: screenGroupEid,
+                name: screengroup.value,
+                published: new Date(opScreenGroup.get('properties', 'published', 0, 'value')).toString()
+                screens: []
+              }
               screenGroups[screenGroupEid].screens.push(screens[id])
-              //  {
-              //   sg: screengroup,
-              //   eid: screenGroupEid,
-              //   name: screengroup.value,
-              //   screens: []
-              // }
             })
         }
         else { screenGroups[screenGroupEid].screens.push(screens[id]) }
