@@ -40,7 +40,7 @@ const setTimezone = function(screen, callback) {
 //   }).on('error', function(e) { console.log("Got an error: ", e) })
 // }
 
-const initPublishedScreengroup(screenGroupEid, timestamp, action) {
+const initPublishedScreengroup = function(screenGroupEid, timestamp, action) {
   // If we unfortunately happened to start dashboard while
   // freshly published screengroup is still compiling.
   if (action !== 'published') { return false }
