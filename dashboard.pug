@@ -17,6 +17,6 @@ block body
             .col-xs-6.col-sm-4.col-lg-2.screen
               - delay = Math.round((new Date().getTime() - screen.lastSeen)/1e3)
               h4(onClick="openInNewTab('https://piletilevi.entu.ee/entity/screen/' + " + screen.eid + ");" class=(delay > screen.avgInterval ? (delay > 5*screen.avgInterval ? 'bg-danger': 'bg-warning') : 'bg-success'))= screen.eid + ' -' + delay + (screen.avgInterval ? '/' + screen.avgInterval : '')
-              p(style="(screen.published === screenGroup.published ? bg-success : bg-error)")= screen.publishedLocal
+              p(style=(screen.published === screenGroup.published ? bg-success : bg-error))= screen.publishedLocal
               p(style="white-space: nowrap; background-color: white;")= screen.name
               p= 'SW' + screen.version.screenwerk + (screen.version.electron ? 'E' + screen.version.electron : '')
