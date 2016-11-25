@@ -40,19 +40,19 @@ const setTimezone = function(screen, callback) {
 //   }).on('error', function(e) { console.log("Got an error: ", e) })
 // }
 
-const initPublishedScreengroup = function(screenGroupEid, timestamp, action) {
-  // If we unfortunately happened to start dashboard while
-  // freshly published screengroup is still compiling.
-  if (action !== 'published') { return false }
-
+const initPublishedScreengroup = function(screenGroupEid, action, timestamp) {
   if (sgIndex[screenGroupEid] === undefined) {
     sgIndex[screenGroupEid] = { timezonedScreengroups: [] }
     sgIndex[screenGroupEid][action] = timestamp
   }
-  return true
 }
 
-
+const updateFromPublishedJson = function(screen) {
+  fs.readFile(screen.eid + '.json', function(err, data) {
+    let jsonData = JSON.parse(data)
+    console.log(JSON.stringify(data, null, 4))
+  })
+}
 
 var screens = {}
 var tzScreenGroups = {} // indexed by sgId = screenGroupEid + timeZoneId
@@ -74,7 +74,13 @@ tail.on('line', function(line) {
   let action = match[2]
   let timestamp = new Date(match[3]).getTime()
 
-  if (initPublishedScreengroup(screenGroupEid, timestamp, action)) {
+  // If we unfortunately happened to start dashboard while
+  // freshly published screengroup is still compiling,
+  // we might hit "compiled" before "published".
+  // Is there a problem?
+  initPublishedScreengroup(screenGroupEid, action, timestamp)
+
+  if (sgIndex[screenGroupEid]) {
     sgIndex[screenGroupEid].timezonedScreengroups.forEach(function(sgId) {
       tzScreenGroups[sgId][action] = timestamp
       tzScreenGroups[sgId][action + 'Local'] = moment(tzScreenGroups[sgId][action]).tz(tzScreenGroups[sgId].timeZoneId).locale('et').format('llll')
@@ -138,7 +144,7 @@ tail.on('line', function(line) {
             entu.getEntity(screenGroupEid, APP_ENTU_OPTIONS)
               .then(function(opScreenGroup) {
                 let timestamp = new Date(opScreenGroup.get(['properties', 'published', 0, 'value'])).getTime()
-                initPublishedScreengroup(screenGroupEid, timestamp, 'published')
+                initPublishedScreengroup(screenGroupEid, 'published', timestamp)
                 sgIndex[screenGroupEid].timezonedScreengroups.push(sgId)
                 tzScreenGroups[sgId].name = opScreenGroup.get(['displayname'])
                 tzScreenGroups[sgId].published = timestamp
@@ -162,6 +168,7 @@ tail.on('line', function(line) {
     }
     screens[id].avgInterval = Math.round((date - screens[id].times[0]) / 10 / (screens[id].times.length - 1)) / 100
   }
+  updateFromPublishedJson(screens[id])
 })
 
 tail.on('error', function(data) {
