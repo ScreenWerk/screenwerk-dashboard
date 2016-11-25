@@ -14,6 +14,7 @@ const APP_ENTU_OPTIONS = {
 
 
 const NGINX_LOG = __dirname + '/' + process.env.NGINX_LOG
+const PUBLISHER_LOG = __dirname + '/' + process.env.PUBLISHER_LOG
 
 const GOOGLE_TIMEZONE_API_KEY = process.env.GOOGLE_TIMEZONE_API_KEY || ''
 const GOOGLE_MAPS_API_KEY = process.env.GOOGLE_MAPS_API_KEY || ''
@@ -41,6 +42,9 @@ const setTimezone = function(screen, callback) {
 
 
 
+
+// Tail Nginx access log
+//
 var screens = {}
 var screenGroups = {}
 if (!fs.existsSync(NGINX_LOG)) fs.writeFileSync(NGINX_LOG, "")
@@ -107,7 +111,8 @@ tail.on('line', function(line) {
   screens[id].times.push(date)
   screens[id].path = match[3]
   screens[id].response = response_code
-  screens[id].version = match[6].split(' ')[match[6].split(' ').length - 1]
+  let _versions = match[6].split(' ')[match[6].split(' ').length - 1]
+  screens[id].version = { screenwerk: _versions.split(';')[0], electron: _versions.split(';')[1] }
   screens[id].lastSeen = screens[id].times[screens[id].times.length - 1]
   if (screens[id].times.length > 1) {
     while (screens[id].times.length > 30) {

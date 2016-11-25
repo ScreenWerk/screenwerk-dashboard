@@ -34,9 +34,11 @@ docker run -d \
     --env="GOOGLE_TIMEZONE_API_KEY=" \
     --env="GOOGLE_MAPS_API_KEY=" \
     --env="NGINX_LOG=access.log" \
+    --env="PUBLISHER_LOG=publisher.log" \
     --env="ENTU_KEY=" \
     --env="SENTRY_DSN=" \
     --volume="/data/swpublisher/screens:/usr/src/swdashboard/screens:ro" \
+    --volume="/data/swpublisher/log/out.log:/usr/src/swdashboard/publisher.log:ro" \
     --volume="/data/nginx/log/access/swpublisher.entu.eu.log:/usr/src/swdashboard/access.log:ro" \
     swdashboard:latest
 
