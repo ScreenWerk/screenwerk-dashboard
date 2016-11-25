@@ -91,7 +91,7 @@ tail.on('line', function(line) {
           let screenGroupEid = String(screengroup.reference)
           let sgId = screenGroupEid + '.' + _screen.timeZoneId
           if (screenGroups[sgId] === undefined) {
-            screenGroups[sgId] = { eid: screenGroupEid, screens: [], timeZoneId: screens[screenEid].timeZoneId }
+            screenGroups[sgId] = { eid: screenGroupEid, screens: [], timeZoneId: _screen.timeZoneId }
             entu.getEntity(screenGroupEid, APP_ENTU_OPTIONS)
               .then(function(opScreenGroup) {
                 screenGroups[sgId].name = opScreenGroup.get(['displayname'])
