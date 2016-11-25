@@ -57,7 +57,7 @@ tail.on('line', function(line) {
   let match = re.exec(line)
   console.log('publisher: ', line)
   console.log('match: ', match)
-}
+})
 
 
 // Tail Nginx access log
