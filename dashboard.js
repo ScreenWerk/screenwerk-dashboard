@@ -48,7 +48,7 @@ const initPublishedScreengroup = function(screenGroupEid, action, timestamp) {
 }
 
 const updateFromPublishedJson = function(screen) {
-  fs.readFile(__dirname + '/' + screens + '/' + screen.eid + '.json', 'utf8', function(err, data) {
+  fs.readFile(__dirname + '/screens/' + screen.eid + '.json', 'utf8', function(err, data) {
     if (err) {
       console.log(err)
       return
