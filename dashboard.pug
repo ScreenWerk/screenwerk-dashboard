@@ -10,9 +10,9 @@ block body
     .row
       each screenGroup in screenGroups
         .col-xs-12
-          H3(onClick="openInNewTab('https://piletilevi.entu.ee/entity/screen-group/' + " + screenGroup.eid + ");")= screenGroup.eid + ': ' + screenGroup.name
           pre.
-            #{new Date(screenGroup.published).toString()}
+            H3(onClick="openInNewTab('https://piletilevi.entu.ee/entity/screen-group/' + " + screenGroup.eid + ");")= screenGroup.eid + ': ' + screenGroup.name
+            //- #{new Date(screenGroup.published).toString()}
             #{screenGroup.publishedLocal}
           each screen in screenGroup.screens
             //- if screen.geo.city

@@ -96,7 +96,7 @@ tail.on('line', function(line) {
               .then(function(opScreenGroup) {
                 screenGroups[sgId].name = opScreenGroup.get(['displayname'])
                 screenGroups[sgId].published = opScreenGroup.get(['properties', 'published', 0, 'value'])
-                screenGroups[sgId].publishedLocal = moment(screenGroups[sgId].published).tz(screenGroups[sgId].timeZoneId).locale('gb').format('llll')
+                screenGroups[sgId].publishedLocal = moment(screenGroups[sgId].published).tz(screenGroups[sgId].timeZoneId).locale('et').format('llll')
               })
           }
           screenGroups[sgId].screens.push(_screen)
