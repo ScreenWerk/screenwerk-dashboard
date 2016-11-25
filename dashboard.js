@@ -46,7 +46,7 @@ const initPublishedScreengroup = function(screenGroupEid, timestamp, action) {
   if (action !== 'published') { return false }
 
   if (sgIndex[screenGroupEid] === undefined) {
-    sgIndex[screenGroupEid] = { timezonedScreengroups = [] }
+    sgIndex[screenGroupEid] = { timezonedScreengroups: [] }
     sgIndex[screenGroupEid][action] = timestamp
   }
   return true
