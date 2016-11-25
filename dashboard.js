@@ -53,9 +53,9 @@ const updateFromPublishedJson = function(screen) {
       console.log(err)
       return
     }
-    console.log(data)
     let jsonData = JSON.parse(data)
-    console.log(JSON.stringify(data, null, 4))
+    let published = new Date(jsonData.publishedAt).getTime()
+    console.log(screen.eid, published, jsonData.publishedAt, jsonData.screenEid)
   })
 }
 
