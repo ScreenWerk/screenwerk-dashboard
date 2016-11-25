@@ -1,7 +1,9 @@
 const fs = require('fs')
-const util = require('util')
-const Tail = require('always-tail')
 const geoip = require('geoip-lite')
+const https = require('https')
+const moment = require('moment-timezone')
+const Tail = require('always-tail')
+const util = require('util')
 
 const entu = require('entulib')
 const APP_ENTU_OPTIONS = {
@@ -15,24 +17,27 @@ const NGINX_LOG = __dirname + '/' + process.env.NGINX_LOG
 
 const GOOGLE_TIMEZONE_API_KEY = process.env.GOOGLE_TIMEZONE_API_KEY || ''
 const GOOGLE_MAPS_API_KEY = process.env.GOOGLE_MAPS_API_KEY || ''
-const https = require('https')
-const setTimezone = function(screen) {
+
+const setTimezone = function(screen, callback) {
   let url = 'https://maps.googleapis.com/maps/api/timezone/json?location=' + screen.geo.ll.join(',') + '&timestamp=1458000000&key=' + GOOGLE_TIMEZONE_API_KEY
   https.get(url, function(res) {
     let body = ''
     res.on('data', function(chunk) { body += chunk })
-    res.on('end', function() { screen.timeZoneId = JSON.parse(body).timeZoneId })
+    res.on('end', function() {
+      screen.timeZoneId = JSON.parse(body).timeZoneId
+      if (callback) { callback() }
+    })
   }).on('error', function(e) { console.log("Got an error: ", e) })
 }
-const setAddress = function(screen) {
-  let url = 'https://maps.googleapis.com/maps/api/geocode/json?latlng=' + screen.geo.ll.join(',') + '&key=' + GOOGLE_MAPS_API_KEY
-  console.log(url)
-  https.get(url, function(res) {
-    let body = ''
-    res.on('data', function(chunk) { body += chunk })
-    res.on('end', function() { screen.address = JSON.parse(body).results[0].formatted_address })
-  }).on('error', function(e) { console.log("Got an error: ", e) })
-}
+// const setAddress = function(screen) {
+//   let url = 'https://maps.googleapis.com/maps/api/geocode/json?latlng=' + screen.geo.ll.join(',') + '&key=' + GOOGLE_MAPS_API_KEY
+//   console.log(url)
+//   https.get(url, function(res) {
+//     let body = ''
+//     res.on('data', function(chunk) { body += chunk })
+//     res.on('end', function() { screen.address = JSON.parse(body).results[0].formatted_address })
+//   }).on('error', function(e) { console.log("Got an error: ", e) })
+// }
 
 
 
@@ -74,26 +79,26 @@ tail.on('line', function(line) {
     screens[id].eid = screenEid
     screens[id].ip = ip
     screens[id].geo = geoip.lookup(ip)
-    setTimezone(screens[id])
-    setAddress(screens[id])
-
-    entu.getEntity(screenEid, APP_ENTU_OPTIONS)
-      .then(function(opScreen) {
-        let screengroup = opScreen.get(['properties', 'screen-group', 0])
-        screens[id].name = opScreen.get(['properties', 'name', 0, 'value'])
-        let screenGroupEid = String(screengroup.reference)
-        if (screenGroups[screenGroupEid] === undefined) {
-          screenGroups[screenGroupEid] = { screens: [] }
-          entu.getEntity(screenGroupEid, APP_ENTU_OPTIONS)
-            .then(function(opScreenGroup) {
-              // screenGroups[screenGroupEid] = opScreenGroup.get()
-              screenGroups[opScreenGroup.get(['id'])].eid = opScreenGroup.get(['id'])
-              screenGroups[opScreenGroup.get(['id'])].name = opScreenGroup.get(['displayname'])
-              screenGroups[opScreenGroup.get(['id'])].published = opScreenGroup.get(['properties', 'published', 0, 'value'])
-            })
-        }
-        screenGroups[screenGroupEid].screens.push(screens[id])
-      })
+    setTimezone(screens[id], function() {
+      entu.getEntity(screenEid, APP_ENTU_OPTIONS)
+        .then(function(opScreen) {
+          let screenEid = opScreen.get(['id'])
+          let screengroup = opScreen.get(['properties', 'screen-group', 0])
+          screens[screenEid].name = opScreen.get(['properties', 'name', 0, 'value'])
+          let screenGroupEid = String(screengroup.reference)
+          let sgId = screenGroupEid + '.' + screens[screenEid].timeZoneId
+          if (screenGroups[sgId] === undefined) {
+            screenGroups[sgId] = { eid: screenGroupEid, screens: [], timeZoneId: screens[screenEid].timeZoneId }
+            entu.getEntity(screenGroupEid, APP_ENTU_OPTIONS)
+              .then(function(opScreenGroup) {
+                screenGroups[sgId].name = opScreenGroup.get(['displayname'])
+                screenGroups[sgId].published = opScreenGroup.get(['properties', 'published', 0, 'value'])
+                screenGroups[sgId].publishedLocal = moment(screenGroups[sgId].published).tz(screenGroups[sgId].timeZoneId)
+              })
+          }
+          screenGroups[sgId].screens.push(screens[screenEid])
+        })
+    })
   }
 
   screens[id].times.push(date)
@@ -116,9 +121,10 @@ tail.on('error', function(data) {
 tail.watch()
 
 
+
+
 const pug = require('pug')
 const renderer = pug.compileFile(__dirname + '/dashboard.pug')
-
 
 const Rx = require('rx')
 const requests_ = new Rx.Subject()

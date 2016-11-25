@@ -11,7 +11,9 @@ block body
       each screenGroup in screenGroups
         .col-xs-12
           H3(onClick="openInNewTab('https://piletilevi.entu.ee/entity/screen-group/' + " + screenGroup.eid + ");")= screenGroup.eid + ': ' + screenGroup.name
-          pre= new Date(screenGroup.published).toString()
+          pre.
+            = new Date(screenGroup.published).toString()
+            = screenGroup.publishedLocal
           each screen in screenGroup.screens
             //- if screen.geo.city
             //-   .col-xs-12.col-sm-8.col-lg-4.screen
