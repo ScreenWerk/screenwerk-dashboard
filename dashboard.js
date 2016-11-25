@@ -40,14 +40,27 @@ const setTimezone = function(screen, callback) {
 //   }).on('error', function(e) { console.log("Got an error: ", e) })
 // }
 
+const initPublishedScreengroup(screenGroupEid, timestamp, action) {
+  // If we unfortunately happened to start dashboard while
+  // freshly published screengroup is still compiling.
+  if (action !== 'published') { return false }
 
+  if (sgIndex[screenGroupEid] === undefined) {
+    sgIndex[screenGroupEid] = { timezonedScreengroups = [] }
+    sgIndex[screenGroupEid][action] = timestamp
+  }
+  return true
+}
+
+
+
+var screens = {}
+var tzScreenGroups = {} // indexed by sgId = screenGroupEid + timeZoneId
+var sgIndex = {} // indexed by screenGroupEid
 
 
 // Tail publisher log
 //
-var screens = {}
-var screenGroups = {}
-var sgIndex = {}
 if (!fs.existsSync(PUBLISHER_LOG)) fs.writeFileSync(PUBLISHER_LOG, "")
 console.log('Tailing logfile from: ' + PUBLISHER_LOG)
 var tail = new Tail(PUBLISHER_LOG, '\n', { interval: 100 })
@@ -61,19 +74,18 @@ tail.on('line', function(line) {
   let action = match[2]
   let timestamp = new Date(match[3]).getTime()
 
+  if (initPublishedScreengroup(screenGroupEid, timestamp, action)) {
+    sgIndex[screenGroupEid].timezonedScreengroups.forEach(function(sgId) {
+      tzScreenGroups[sgId][action] = timestamp
+      tzScreenGroups[sgId][action + 'Local'] = moment(tzScreenGroups[sgId][action]).tz(tzScreenGroups[sgId].timeZoneId).locale('et').format('llll')
+    })
+  }
 
-  sgIndex[screenGroupEid].forEach(function(sgId) {
-    screenGroups[sgId][action] = timestamp
-    screenGroups[sgId][action + 'Local'] = moment(screenGroups[sgId][action]).tz(screenGroups[sgId].timeZoneId).locale('et').format('llll')
-  })
 })
 
 
 // Tail Nginx access log
 //
-var screens = {}
-var screenGroups = {}
-var sgIndex = {}
 if (!fs.existsSync(NGINX_LOG)) fs.writeFileSync(NGINX_LOG, "")
 console.log('Tailing logfile from: ' + NGINX_LOG)
 var tail = new Tail(NGINX_LOG, '\n', { interval: 100 })
@@ -121,17 +133,19 @@ tail.on('line', function(line) {
           _screen.name = opScreen.get(['properties', 'name', 0, 'value'])
           let screenGroupEid = String(screengroup.reference)
           let sgId = screenGroupEid + '.' + _screen.timeZoneId
-          if (screenGroups[sgId] === undefined) {
-            if (sgIndex[screenGroupEid] === undefined) { sgIndex[screenGroupEid] = [] }
-            sgIndex[screenGroupEid].push(sgId)
-            screenGroups[sgId] = { eid: screenGroupEid, screens: [], timeZoneId: _screen.timeZoneId }
+          if (tzScreenGroups[sgId] === undefined) {
+            tzScreenGroups[sgId] = { eid: screenGroupEid, screens: [], timeZoneId: _screen.timeZoneId }
             entu.getEntity(screenGroupEid, APP_ENTU_OPTIONS)
               .then(function(opScreenGroup) {
-                screenGroups[sgId].name = opScreenGroup.get(['displayname'])
-                screenGroups[sgId].publishedLocal = moment(screenGroups[sgId].published).tz(screenGroups[sgId].timeZoneId).locale('et').format('llll')
+                let timestamp = new Date(opScreenGroup.get(['properties', 'published', 0, 'value'])).getTime()
+                initPublishedScreengroup(screenGroupEid, timestamp, 'published')
+                sgIndex[screenGroupEid].timezonedScreengroups.push(sgId)
+                tzScreenGroups[sgId].name = opScreenGroup.get(['displayname'])
+                tzScreenGroups[sgId].published = timestamp
+                tzScreenGroups[sgId].publishedLocal = moment(tzScreenGroups[sgId].published).tz(tzScreenGroups[sgId].timeZoneId).locale('et').format('llll')
               })
           }
-          screenGroups[sgId].screens.push(_screen)
+          tzScreenGroups[sgId].screens.push(_screen)
         })
     })
   }
@@ -170,7 +184,7 @@ function serveStarts(e) {
   e.res.writeHead(200, { 'Content-Type': 'text/HTML' })
   let now = new Date().getTime()
   let i = 1
-  e.res.end(renderer({screenGroups: screenGroups}))
+  e.res.end(renderer({screenGroups: tzScreenGroups}))
 }
 
 const subscription = requests_
