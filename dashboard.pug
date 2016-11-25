@@ -12,7 +12,7 @@ block body
         .col-xs-12
           H3(onClick="openInNewTab('https://piletilevi.entu.ee/entity/screen-group/' + " + screenGroup.eid + ");")
             | #{screenGroup.eid}: #{screenGroup.name}
-          pre #{screenGroup.timeZoneId}: #{screenGroup.publishedLocal}
+          pre(class=(screenGroup.updated - screenGroup.published > 3000 ? bg-danger : bg-success)) #{screenGroup.timeZoneId}: published #{screenGroup.publishedLocal}, updated #{screenGroup.updatedLocal}
           each screen in screenGroup.screens
             .col-xs-6.col-sm-4.col-lg-2.screen
               - delay = Math.round((new Date().getTime() - screen.lastSeen)/1e3)

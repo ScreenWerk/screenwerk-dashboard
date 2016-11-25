@@ -59,15 +59,12 @@ tail.on('line', function(line) {
   console.log('match: ', match)
   let screenGroupEid = match[1]
   let action = match[2]
-  let date = match[3]
+  let timestamp = new Date(match[3]).getTime()
 
-  if (sgIndex[screenGroupEid] === undefined) {
-    console.log('SG ' + screenGroupEid + ' not yet registered')
-    return
-  }
+  if (sgIndex[screenGroupEid] === undefined) { sgIndex[screenGroupEid] = [] }
 
   sgIndex[screenGroupEid].forEach(function(sgId) {
-    screenGroups[sgId][action] = date
+    screenGroups[sgId][action] = timestamp
     screenGroups[sgId][action + 'Local'] = moment(screenGroups[sgId][action]).tz(screenGroups[sgId].timeZoneId).locale('et').format('llll')
   })
 })
