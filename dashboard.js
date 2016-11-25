@@ -52,9 +52,9 @@ if (!fs.existsSync(PUBLISHER_LOG)) fs.writeFileSync(PUBLISHER_LOG, "")
 console.log('Tailing logfile from: ' + PUBLISHER_LOG)
 var tail = new Tail(PUBLISHER_LOG, '\n', { interval: 100 })
 
-let re = /\b([0-9]*)\b \b([a-z]*)\b at (.*)/
+let p_re = /\b([0-9]*)\b \b([a-z]*)\b at (.*)/
 tail.on('line', function(line) {
-  let match = re.exec(line)
+  let match = p_re.exec(line)
   console.log('publisher: ', line)
   console.log('match: ', match)
 })
@@ -69,9 +69,9 @@ if (!fs.existsSync(NGINX_LOG)) fs.writeFileSync(NGINX_LOG, "")
 console.log('Tailing logfile from: ' + NGINX_LOG)
 var tail = new Tail(NGINX_LOG, '\n', { interval: 100 })
 
-let re = /\b((?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?))\b.*\[(.*)\].*"GET (.*?)\/([0-9]*)(?:\.json)? HTTP.*?" ([0-9]+?) .*" "(.*)"/
+let n_re = /\b((?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?))\b.*\[(.*)\].*"GET (.*?)\/([0-9]*)(?:\.json)? HTTP.*?" ([0-9]+?) .*" "(.*)"/
 tail.on('line', function(line) {
-  let match = re.exec(line)
+  let match = n_re.exec(line)
 
   if (match === null) {
     console.log('cant parse ', line)
