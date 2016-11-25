@@ -136,6 +136,7 @@ tail.on('line', function(line) {
     screens[id].ip = ip
     screens[id].geo = geoip.lookup(ip)
     setTimezone(screens[id], function(_screen) {
+      updateFromPublishedJson(screens[id])
       entu.getEntity(_screen.eid, APP_ENTU_OPTIONS)
         .then(function(opScreen) {
           if (_screen.eid != opScreen.get(['id'])) {
@@ -175,7 +176,6 @@ tail.on('line', function(line) {
     }
     screens[id].avgInterval = Math.round((date - screens[id].times[0]) / 10 / (screens[id].times.length - 1)) / 100
   }
-  updateFromPublishedJson(screens[id])
 })
 
 tail.on('error', function(data) {
