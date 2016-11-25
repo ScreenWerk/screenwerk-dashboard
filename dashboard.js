@@ -43,10 +43,28 @@ const setTimezone = function(screen, callback) {
 
 
 
+// Tail publisher log
+//
+var screens = {}
+var screenGroups = {}
+var sgIndex = {}
+if (!fs.existsSync(PUBLISHER_LOG)) fs.writeFileSync(PUBLISHER_LOG, "")
+console.log('Tailing logfile from: ' + PUBLISHER_LOG)
+var tail = new Tail(PUBLISHER_LOG, '\n', { interval: 100 })
+
+let re = /\b([0-9]*)\b \b([a-z]*)\b at (.*)/
+tail.on('line', function(line) {
+  let match = re.exec(line)
+  console.log('publisher: ', line)
+  console.log('match: ', match)
+}
+
+
 // Tail Nginx access log
 //
 var screens = {}
 var screenGroups = {}
+var sgIndex = {}
 if (!fs.existsSync(NGINX_LOG)) fs.writeFileSync(NGINX_LOG, "")
 console.log('Tailing logfile from: ' + NGINX_LOG)
 var tail = new Tail(NGINX_LOG, '\n', { interval: 100 })
@@ -95,6 +113,8 @@ tail.on('line', function(line) {
           let screenGroupEid = String(screengroup.reference)
           let sgId = screenGroupEid + '.' + _screen.timeZoneId
           if (screenGroups[sgId] === undefined) {
+            if (sgIndex[screenGroupEid] === undefined) { sgIndex[screenGroupEid] = [] }
+            sgIndex[screenGroupEid].push(sgId)
             screenGroups[sgId] = { eid: screenGroupEid, screens: [], timeZoneId: _screen.timeZoneId }
             entu.getEntity(screenGroupEid, APP_ENTU_OPTIONS)
               .then(function(opScreenGroup) {
