@@ -57,6 +57,19 @@ tail.on('line', function(line) {
   let match = p_re.exec(line)
   console.log('publisher: ', line)
   console.log('match: ', match)
+  let screenGroupEid = match[1]
+  let action = match[2]
+  let date = match[3]
+
+  if (sgIndex[screenGroupEid] === undefined) {
+    console.log('SG ' + screenGroupEid + ' not yet registered')
+    return
+  }
+
+  sgIndex[screenGroupEid].forEach(function(sgId) {
+    screenGroups[sgId][action] = date
+    screenGroups[sgId][action + 'Local'] = moment(screenGroups[sgId][action]).tz(screenGroups[sgId].timeZoneId).locale('et').format('llll')
+  })
 })
 
 
