@@ -130,7 +130,10 @@ tail.on('line', function(line) {
     }
   }
 
-  if (screens[id] === undefined) {
+  if (screens[id]) {
+    updateFromPublishedJson(screens[id])
+  }
+  else {
     screens[id] = {eid:'', name:'', times:[], path:'', response:'', version:''}
     screens[id].eid = screenEid
     screens[id].ip = ip
