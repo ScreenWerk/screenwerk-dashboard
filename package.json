@@ -1,7 +1,7 @@
 {
   "name": "ScreenWerk-Dashboard",
   "description": "Dashboard for Screenwerk players",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "main": "./dashboard.js",
   "license": "MIT",
   "private": true,
