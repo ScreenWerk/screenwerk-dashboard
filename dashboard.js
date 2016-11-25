@@ -61,7 +61,6 @@ tail.on('line', function(line) {
   let action = match[2]
   let timestamp = new Date(match[3]).getTime()
 
-  if (sgIndex[screenGroupEid] === undefined) { sgIndex[screenGroupEid] = [] }
 
   sgIndex[screenGroupEid].forEach(function(sgId) {
     screenGroups[sgId][action] = timestamp
@@ -129,7 +128,6 @@ tail.on('line', function(line) {
             entu.getEntity(screenGroupEid, APP_ENTU_OPTIONS)
               .then(function(opScreenGroup) {
                 screenGroups[sgId].name = opScreenGroup.get(['displayname'])
-                screenGroups[sgId].published = opScreenGroup.get(['properties', 'published', 0, 'value'])
                 screenGroups[sgId].publishedLocal = moment(screenGroups[sgId].published).tz(screenGroups[sgId].timeZoneId).locale('et').format('llll')
               })
           }
