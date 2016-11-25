@@ -25,7 +25,7 @@ const setTimezone = function(screen, callback) {
     res.on('data', function(chunk) { body += chunk })
     res.on('end', function() {
       screen.timeZoneId = JSON.parse(body).timeZoneId
-      if (callback) { callback() }
+      callback(screen)
     })
   }).on('error', function(e) { console.log("Got an error: ", e) })
 }
@@ -79,14 +79,17 @@ tail.on('line', function(line) {
     screens[id].eid = screenEid
     screens[id].ip = ip
     screens[id].geo = geoip.lookup(ip)
-    setTimezone(screens[id], function() {
-      entu.getEntity(screenEid, APP_ENTU_OPTIONS)
+    setTimezone(screens[id], function(_screen) {
+      entu.getEntity(_screen.eid, APP_ENTU_OPTIONS)
         .then(function(opScreen) {
-          let screenEid = opScreen.get(['id'])
+          if (_screen.eid != opScreen.get(['id'])) {
+            console.log(screenEid + '!=' + opScreen.get(['id']))
+            throw 'foooo!'
+          }
           let screengroup = opScreen.get(['properties', 'screen-group', 0])
-          screens[screenEid].name = opScreen.get(['properties', 'name', 0, 'value'])
+          _screen.name = opScreen.get(['properties', 'name', 0, 'value'])
           let screenGroupEid = String(screengroup.reference)
-          let sgId = screenGroupEid + '.' + screens[screenEid].timeZoneId
+          let sgId = screenGroupEid + '.' + _screen.timeZoneId
           if (screenGroups[sgId] === undefined) {
             screenGroups[sgId] = { eid: screenGroupEid, screens: [], timeZoneId: screens[screenEid].timeZoneId }
             entu.getEntity(screenGroupEid, APP_ENTU_OPTIONS)
@@ -96,7 +99,7 @@ tail.on('line', function(line) {
                 screenGroups[sgId].publishedLocal = moment(screenGroups[sgId].published).tz(screenGroups[sgId].timeZoneId)
               })
           }
-          screenGroups[sgId].screens.push(screens[screenEid])
+          screenGroups[sgId].screens.push(_screen)
         })
     })
   }
