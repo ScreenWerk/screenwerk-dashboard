@@ -11,8 +11,7 @@ block body
       each screenGroup in screenGroups
         .col-xs-12
           H3(onClick="openInNewTab('https://piletilevi.entu.ee/entity/screen-group/' + " + screenGroup.eid + ");")
-            | #{screenGroup.eid}: #{screenGroup.name}
-            | #{screenGroup.publishedLocal}
+            | #{screenGroup.eid} @ #{screenGroup.publishedLocal} : #{screenGroup.name}
           each screen in screenGroup.screens
             //- if screen.geo.city
             //-   .col-xs-12.col-sm-8.col-lg-4.screen
@@ -31,5 +30,3 @@ block body
               h4(onClick="openInNewTab('https://piletilevi.entu.ee/entity/screen/' + " + screen.eid + ");" class=(delay > screen.avgInterval ? (delay > 5*screen.avgInterval ? 'bg-danger': 'bg-warning') : 'bg-success'))= screen.eid + ' -' + delay + (screen.avgInterval ? '/' + screen.avgInterval : '')
               p(style="white-space: nowrap; background-color: white;")= screen.name
               p= screen.version
-              p= 'Timezone: ' + screen.timeZoneId
-              
