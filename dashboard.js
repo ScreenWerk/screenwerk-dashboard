@@ -55,7 +55,9 @@ const updateFromPublishedJson = function(screen) {
     }
     let jsonData = JSON.parse(data)
     let published = new Date(jsonData.publishedAt).getTime()
-    console.log(screen.eid, published, jsonData.publishedAt, jsonData.screenEid)
+    // console.log(screen.eid, published, jsonData.publishedAt, jsonData.screenEid)
+    screen.published = published
+    screen.publishedLocal = moment(screen.published).tz(screen.timeZoneId).locale('et').format('llll')
   })
 }
 
