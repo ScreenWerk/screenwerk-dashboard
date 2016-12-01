@@ -247,4 +247,5 @@ http.createServer((req, res) => {
   requests_.onNext({ req: req, res: res })
 }).listen(PORT, () => {
   console.log(`Server running at port:${PORT}`)
+  console.log(state.tzScreenGroups["73.Europe/Tallinn"].screens[0])
 })
