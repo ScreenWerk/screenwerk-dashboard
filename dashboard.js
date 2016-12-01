@@ -22,7 +22,7 @@ const SCREENS_DIR = __dirname + '/screens/'
 var nodeCleanup = require('node-cleanup')
 nodeCleanup(function () {
   console.log('Cleanup before exit')
-  state = fs.writeFileSync(STATE_FILE, JSON.stringify(state, null, 4) 'utf8')
+  state = fs.writeFileSync(STATE_FILE, JSON.stringify(state, null, 4), 'utf8')
 })
 
 
