@@ -1,6 +1,7 @@
 #!/bin/bash
 
 mkdir -p /data/swdashboard/code /data/swdashboard/log
+touch /data/swdashboard/state.json
 cd /data/swdashboard/code
 
 git clone -q https://github.com/mitselek/ScreenWerk-Dashboard.git ./
@@ -37,6 +38,7 @@ docker run -d \
     --env="PUBLISHER_LOG=publisher.log" \
     --env="ENTU_KEY=" \
     --env="SENTRY_DSN=" \
+    --volume="/data/swdashboard/state.json:/usr/src/swdashboard/state.json" \
     --volume="/data/swpublisher/screens:/usr/src/swdashboard/screens:ro" \
     --volume="/data/swpublisher/log/out.log:/usr/src/swdashboard/publisher.log:ro" \
     --volume="/data/nginx/log/access/swpublisher.entu.eu.log:/usr/src/swdashboard/access.log:ro" \

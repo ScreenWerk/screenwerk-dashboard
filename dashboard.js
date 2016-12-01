@@ -15,6 +15,16 @@ const APP_ENTU_OPTIONS = {
 
 const NGINX_LOG = __dirname + '/' + process.env.NGINX_LOG
 const PUBLISHER_LOG = __dirname + '/' + process.env.PUBLISHER_LOG
+const STATE_FILE = __dirname + '/state.json'
+const SCREENS_DIR = __dirname + '/screens/'
+
+
+var nodeCleanup = require('node-cleanup')
+nodeCleanup(function () {
+  console.log('Cleanup before exit')
+  state = fs.writeFileSync(STATE_FILE, JSON.stringify(state, null, 4) 'utf8')
+})
+
 
 const GOOGLE_TIMEZONE_API_KEY = process.env.GOOGLE_TIMEZONE_API_KEY || ''
 const GOOGLE_MAPS_API_KEY = process.env.GOOGLE_MAPS_API_KEY || ''
@@ -48,7 +58,7 @@ const initPublishedScreengroup = function(screenGroupEid, action, timestamp) {
 }
 
 const updateFromPublishedJson = function(screen) {
-  fs.readFile(__dirname + '/screens/' + screen.eid + '.json', 'utf8', function(err, data) {
+  fs.readFile(SCREENS_DIR + screen.eid + '.json', 'utf8', function(err, data) {
     if (err) {
       console.log(err)
       return
@@ -60,9 +70,15 @@ const updateFromPublishedJson = function(screen) {
   })
 }
 
-var screens = {}
-var tzScreenGroups = {} // indexed by sgId = screenGroupEid + timeZoneId
-var sgIndex = {} // indexed by screenGroupEid
+
+let state = { screens: {}, tzScreenGroups: {}, sgIndex: {} }
+let state_data = fs.readFileSync(STATE_FILE, 'utf8')
+if (state_data.length > 0) {
+  state = JSON.parse(state_data)
+}
+let screens = state.screens
+let tzScreenGroups = state.tzScreenGroups // indexed by sgId = screenGroupEid + timeZoneId
+let sgIndex = state.sgIndex // indexed by screenGroupEid
 
 
 // Tail publisher log
