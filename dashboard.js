@@ -25,13 +25,6 @@ nodeCleanup(function () {
   fs.writeFileSync(STATE_FILE, JSON.stringify(state, null, 4), 'utf8')
 })
 
-saveState = function () {
-  fs.writeFileSync(STATE_FILE, JSON.stringify(state, null, 4), 'utf8')
-  setTimeout(function () {
-    saveState()
-  }, 1e3)
-})
-saveState()
 
 const GOOGLE_TIMEZONE_API_KEY = process.env.GOOGLE_TIMEZONE_API_KEY || ''
 const GOOGLE_MAPS_API_KEY = process.env.GOOGLE_MAPS_API_KEY || ''
@@ -86,6 +79,14 @@ if (state_data.length > 0) {
 let screens = state.screens
 let tzScreenGroups = state.tzScreenGroups // indexed by sgId = screenGroupEid + timeZoneId
 let sgIndex = state.sgIndex // indexed by screenGroupEid
+
+saveState = function () {
+  fs.writeFileSync(STATE_FILE, JSON.stringify(state, null, 4), 'utf8')
+  setTimeout(function () {
+    saveState()
+  }, 1e3)
+})
+saveState()
 
 
 // Tail publisher log
