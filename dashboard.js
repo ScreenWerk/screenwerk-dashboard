@@ -87,8 +87,6 @@ Object.keys(tzScreenGroups).forEach(function(key) {
 var sgIndex = state.sgIndex // indexed by screenGroupEid
 
 saveState = function () {
-  console.log('save state');
-  console.log(state.tzScreenGroups["73.Europe/Tallinn"].screens[0])
   fs.writeFileSync(STATE_FILE, JSON.stringify(state, null, 4), 'utf8')
   setTimeout(function () {
     saveState()
@@ -100,7 +98,6 @@ saveState()
 // Tail publisher log
 //
 if (!fs.existsSync(PUBLISHER_LOG)) fs.writeFileSync(PUBLISHER_LOG, "")
-console.log('Tailing logfile from: ' + PUBLISHER_LOG)
 var tail = new Tail(PUBLISHER_LOG, '\n', { interval: 100 })
 
 let p_re = /\b([0-9]*)\b \b([a-z]*)\b at (.*)/
@@ -231,7 +228,6 @@ function serveStats(e) {
   // console.log('serving stats')
   e.res.writeHead(200, { 'Content-Type': 'text/HTML' })
   let now = new Date().getTime()
-  console.log(state.tzScreenGroups["73.Europe/Tallinn"].screens[0])
   e.res.end(renderer({screenGroups: state.tzScreenGroups}))
 }
 
@@ -255,5 +251,4 @@ http.createServer((req, res) => {
   requests_.onNext({ req: req, res: res })
 }).listen(PORT, () => {
   console.log(`Server running at port:${PORT}`)
-  console.log(state.tzScreenGroups["73.Europe/Tallinn"].screens[0])
 })
