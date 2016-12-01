@@ -81,6 +81,8 @@ var tzScreenGroups = state.tzScreenGroups // indexed by sgId = screenGroupEid + 
 var sgIndex = state.sgIndex // indexed by screenGroupEid
 
 saveState = function () {
+  console.log('save state');
+  console.log(state.tzScreenGroups["73.Europe/Tallinn"].screens[0])
   fs.writeFileSync(STATE_FILE, JSON.stringify(state, null, 4), 'utf8')
   setTimeout(function () {
     saveState()
