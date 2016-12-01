@@ -6,12 +6,13 @@ append styles
 
 block body
   .container
-    h1.page-header All the screens
+    //- h1.page-header All the screens
     .row
       each screenGroup in screenGroups
         .col-xs-12
           H3(onClick="openInNewTab('https://piletilevi.entu.ee/entity/screen-group/' + " + screenGroup.eid + ");")
             | #{screenGroup.eid}: #{screenGroup.name}
+            |  (#{screenGroup.screens.length})
           pre(class=(screenGroup.compiled < screenGroup.published ? 'bg-danger' : 'bg-success')) #{screenGroup.timeZoneId}: published #{screenGroup.publishedLocal}, compiled #{screenGroup.compiledLocal}
           each screen in screenGroup.screens
             .col-xs-6.col-sm-4.col-lg-2.screen
