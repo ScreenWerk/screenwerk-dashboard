@@ -85,7 +85,7 @@ saveState = function () {
   setTimeout(function () {
     saveState()
   }, 1e3)
-})
+}
 saveState()
 
 
