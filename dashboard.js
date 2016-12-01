@@ -78,6 +78,12 @@ if (state_data.length > 0) {
 }
 var screens = state.screens
 var tzScreenGroups = state.tzScreenGroups // indexed by sgId = screenGroupEid + timeZoneId
+Object.keys(tzScreenGroups).forEach(function(key) {
+  let tzScreenGroup = tzScreenGroups[key]
+  tzScreenGroup.screens.forEach(function(screen) {
+    screen = screens[screen.eid + '@' + screen.ip]
+  })
+})
 var sgIndex = state.sgIndex // indexed by screenGroupEid
 
 saveState = function () {
