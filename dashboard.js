@@ -162,7 +162,7 @@ tail.on('line', function(line) {
     screens[id].ip = ip
     screens[id].geo = geoip.lookup(ip)
     setTimezone(screens[id], function(_screen) {
-      updateFromPublishedJson(screens[id])
+      updateFromPublishedJson(_screen)
       entu.getEntity(_screen.eid, APP_ENTU_OPTIONS)
         .then(function(opScreen) {
           if (_screen.eid != opScreen.get(['id'])) {

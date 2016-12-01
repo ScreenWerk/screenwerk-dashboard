@@ -20,3 +20,5 @@ block body
               p(class=(screen.publishedLocal === screenGroup.publishedLocal ? 'bg-success' : 'bg-danger'))= screen.publishedLocal
               p(style="white-space: nowrap; background-color: white;")= screen.name
               p= 'SW' + screen.version.screenwerk + (screen.version.electron ? ' E' + screen.version.electron : '')
+
+      pre= JSON.stringify(screenGroups, null, 4)
