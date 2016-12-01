@@ -71,14 +71,14 @@ const updateFromPublishedJson = function(screen) {
 }
 
 
-let state = { screens: {}, tzScreenGroups: {}, sgIndex: {} }
-let state_data = fs.readFileSync(STATE_FILE, 'utf8')
+var state = { screens: {}, tzScreenGroups: {}, sgIndex: {} }
+var state_data = fs.readFileSync(STATE_FILE, 'utf8')
 if (state_data.length > 0) {
   state = JSON.parse(state_data)
 }
-let screens = state.screens
-let tzScreenGroups = state.tzScreenGroups // indexed by sgId = screenGroupEid + timeZoneId
-let sgIndex = state.sgIndex // indexed by screenGroupEid
+var screens = state.screens
+var tzScreenGroups = state.tzScreenGroups // indexed by sgId = screenGroupEid + timeZoneId
+var sgIndex = state.sgIndex // indexed by screenGroupEid
 
 saveState = function () {
   fs.writeFileSync(STATE_FILE, JSON.stringify(state, null, 4), 'utf8')
@@ -219,18 +219,18 @@ const renderer = pug.compileFile(__dirname + '/dashboard.pug')
 const Rx = require('rx')
 const requests_ = new Rx.Subject()
 
-function serveStarts(e) {
+function serveStats(e) {
   // console.log('serving stats')
   e.res.writeHead(200, { 'Content-Type': 'text/HTML' })
   let now = new Date().getTime()
   let i = 1
-  e.res.end(renderer({screenGroups: tzScreenGroups}))
+  e.res.end(renderer({screenGroups: state.tzScreenGroups}))
 }
 
 const subscription = requests_
   // .tap(e => console.log('request to', e.req.url))
   .subscribe(
-    serveStarts,
+    serveStats,
     console.error,
     () => {
         console.log('stream is done')
