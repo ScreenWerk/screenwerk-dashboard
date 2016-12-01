@@ -223,7 +223,7 @@ function serveStats(e) {
   // console.log('serving stats')
   e.res.writeHead(200, { 'Content-Type': 'text/HTML' })
   let now = new Date().getTime()
-  let i = 1
+  console.log(state.tzScreenGroups["73.Europe/Tallinn"].screens[0])
   e.res.end(renderer({screenGroups: state.tzScreenGroups}))
 }
 
