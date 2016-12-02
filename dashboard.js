@@ -225,6 +225,7 @@ const Rx = require('rx')
 const requests_ = new Rx.Subject()
 
 function removeScreen(id) {
+  console.log('removing ' + id)
   delete screens[id]
 }
 
