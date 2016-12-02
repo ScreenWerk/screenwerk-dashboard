@@ -83,7 +83,7 @@ Object.keys(tzScreenGroups).forEach(function(key) {
   tzScreenGroup.screens = tzScreenGroup.screens
   .filter(function(screen) {
     return screen
-  }
+  })
   .map(function(screen) {
     return screens[screen.eid + '@' + screen.ip]
   })
