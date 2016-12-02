@@ -233,7 +233,7 @@ function serveStats(e) {
 
 const subscription = requests_
   .tap(e => {
-    console.log('request to', e.req.url)
+    console.log('request to', util.inspect(e.req))
   })
   .subscribe(
     serveStats,
