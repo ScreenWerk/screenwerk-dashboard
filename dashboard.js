@@ -231,6 +231,10 @@ const requests_ = new Rx.Subject()
 function removeScreen(id) {
   console.log('removing ' + id)
   delete screens[id]
+  tzScreenGroup.screens = tzScreenGroup.screens
+  .filter(function(screen) {
+    return screen
+  })
 }
 
 function serveStats(e) {
