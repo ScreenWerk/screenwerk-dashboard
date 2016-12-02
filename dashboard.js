@@ -231,9 +231,15 @@ const requests_ = new Rx.Subject()
 function removeScreen(id) {
   console.log('removing ' + id)
   delete screens[id]
-  tzScreenGroup.screens = tzScreenGroup.screens
-  .filter(function(screen) {
-    return screen
+  Object.keys(tzScreenGroups).forEach(function(key) {
+    let tzScreenGroup = tzScreenGroups[key]
+    tzScreenGroup.screens = tzScreenGroup.screens
+    .filter(function(screen) {
+      return screen
+    })
+    .map(function(screen) {
+      return screens[screen.eid + '@' + screen.ip]
+    })
   })
 }
 
