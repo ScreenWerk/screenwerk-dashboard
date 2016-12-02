@@ -14,9 +14,9 @@ block body
             | #{screenGroup.eid}: #{screenGroup.name}
             |  (#{screenGroup.screens.length})
           pre(class=(screenGroup.compiled < screenGroup.published ? 'bg-danger' : 'bg-success')) #{screenGroup.timeZoneId}: published #{screenGroup.publishedLocal}, compiled #{screenGroup.compiledLocal}
-          each screen, id in screenGroup.screens
+          each screen in screenGroup.screens
             .col-xs-6.col-sm-4.col-lg-2.screen
-              a(href='/remove/' + id class="btn-xs btn-danger" role="button" style="float: left; margin-left: -15px; margin-right: 5px;") X
+              a(href='/remove/' + (screen.id ? screen.id : screen.eid + '@' + screen.ip) class="btn-xs btn-danger" role="button" style="float: left; margin-left: -15px; margin-right: 5px;") X
               - delay = Math.round((new Date().getTime() - screen.lastSeen)/1e3)
               h4(onClick="openInNewTab('https://piletilevi.entu.ee/entity/screen/' + " + screen.eid + ");" class=(delay > screen.avgInterval ? (delay > 5*screen.avgInterval ? 'bg-danger': 'bg-warning') : 'bg-success'))= screen.eid + ' -' + delay + (screen.avgInterval ? '/' + screen.avgInterval : '')
               p(class=(screen.publishedLocal === screenGroup.publishedLocal ? 'bg-success' : 'bg-danger'))= screen.publishedLocal

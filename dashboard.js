@@ -162,7 +162,7 @@ tail.on('line', function(line) {
     updateFromPublishedJson(screens[id])
   }
   else {
-    screens[id] = {eid:'', name:'', times:[], path:'', response:'', version:''}
+    screens[id] = {id: id, eid:'', name:'', times:[], path:'', response:'', version:''}
     screens[id].eid = screenEid
     screens[id].ip = ip
     screens[id].geo = geoip.lookup(ip)
@@ -224,6 +224,10 @@ const renderer = pug.compileFile(__dirname + '/dashboard.pug')
 const Rx = require('rx')
 const requests_ = new Rx.Subject()
 
+function removeScreen(id) {
+  delete screens[id]
+}
+
 function serveStats(e) {
   // console.log('serving stats')
   e.res.writeHead(200, { 'Content-Type': 'text/HTML' })
@@ -233,7 +237,10 @@ function serveStats(e) {
 
 const subscription = requests_
   .tap(e => {
-    console.log('request to', util.inspect(e.req))
+    if (e.req.url.split('/')[1] === 'remove') {
+      removeScreen(e.req.url.split('/')[2])
+    }
+    console.log('request to', e.req.url)
   })
   .subscribe(
     serveStats,
