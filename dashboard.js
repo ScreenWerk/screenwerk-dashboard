@@ -80,7 +80,11 @@ var screens = state.screens
 var tzScreenGroups = state.tzScreenGroups // indexed by sgId = screenGroupEid + timeZoneId
 Object.keys(tzScreenGroups).forEach(function(key) {
   let tzScreenGroup = tzScreenGroups[key]
-  tzScreenGroup.screens = tzScreenGroup.screens.map(function(screen) {
+  tzScreenGroup.screens = tzScreenGroup.screens
+  .filter(function(screen) {
+    return screen
+  }
+  .map(function(screen) {
     return screens[screen.eid + '@' + screen.ip]
   })
 })
